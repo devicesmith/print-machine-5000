@@ -9,7 +9,7 @@ from PIL import Image, ImageOps, ImageEnhance
 app = Flask(__name__)
 
 PRINTER_PATH = "/dev/usb/lp0"
-PRINTER_WIDTH_PX = 576  # typical printable width for 80mm thermal printers
+PRINTER_WIDTH_PX = 576
 USER_AGENT = "Mozilla/5.0 (compatible; ReceiptPrinter/1.0)"
 
 
@@ -48,11 +48,6 @@ def prepare_image_for_thermal(image: Image.Image, max_width: int) -> Image.Image
 
 
 def send_beep(printer, n=3, t=2):
-    """
-    ESC/POS buzzer command: ESC B n t
-    n = number of beeps
-    t = duration (printer-specific unit)
-    """
     try:
         printer._raw(bytes([0x1B, 0x42, n, t]))
     except Exception:
@@ -110,8 +105,7 @@ def print_submission(data: dict, timestamp: str):
         printer.text(f"{data.get('Message', 'N/A')}\n")
 
         printer.text("\n")
-
-        send_beep(printer, n=2, t=2)
+        send_beep(printer, n=3, t=2)
         printer.cut()
     finally:
         printer.close()
@@ -156,4 +150,4 @@ def handle_form():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
