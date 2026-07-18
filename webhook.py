@@ -56,7 +56,6 @@ def send_beep(printer, n=3, t=2):
 
 def print_image_from_url(printer, image_url):
     if not image_url or image_url == "N/A":
-        printer.text("image n/a\n")
         return
 
     try:
